@@ -7,15 +7,15 @@
 //全关
 
 //zkrt_debug 170322
-#define _ALL_THROW_LOCK 970   //值越小，锁的越多     num2  old:1340
+#define _ALL_THROW_LOCK 1000   //值越小，锁的越多     num2  old:1340
 //第一个
-#define _1_THROW_UNLOCK 1150   //差值275										old:1480
+#define _1_THROW_UNLOCK 1180   //差值275										old:1480
 #define _1_THROW_LOCK   _ALL_THROW_LOCK
 //第二个
-#define _2_THROW_UNLOCK	1330   //差值												old:1575
+#define _2_THROW_UNLOCK	1350   //差值												old:1575
 #define _2_THROW_LOCK   _ALL_THROW_LOCK
 //第三个
-#define _3_THROW_UNLOCK 1510   //差值												old:1665
+#define _3_THROW_UNLOCK 1520   //差值												old:1665
 #define _3_THROW_LOCK   _ALL_THROW_LOCK
 
 
