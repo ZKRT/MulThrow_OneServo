@@ -6,15 +6,15 @@ void KEY_Init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
-   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB, ENABLE);
+   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
  
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//由于另一端接GND，那么这里初始化为高电平，作为空闲状态；按下时导通，GND拉低IO口形成低电平
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_3;//KEY1/KEY2
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6;//KEY1/KEY2
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;					//KEY3
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;					//KEY3
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 } 
 //按键处理函数
@@ -26,9 +26,9 @@ uint8_t Key_value3 = 1;
 uint16_t key_in_test = 0;
 uint8_t KEY_Scan(void)
 {
-	Key_value1 = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4);
-	Key_value2 = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_3);
-	Key_value3 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_15);
+	Key_value1 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_5);
+	Key_value2 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6);
+	Key_value3 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_7);
 	
 	if((key_up == 1)&&((Key_value1 == 0)||(Key_value2 == 0)||(Key_value3 ==0))&&(_key_count - TimingDelay > 500))//从松开到按下：返回相应键值，并且记录按下标志位。设置个时间用于防止多次触发，这里500ms
 	{

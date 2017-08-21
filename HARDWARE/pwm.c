@@ -1,6 +1,8 @@
 #include "pwm.h"
 #include "throw.h"
 
+//说明：此版本使用PWM8-PA1引脚，支持多抛吊舱模块V4.0
+
 //PWM1_T3C2，对应PB5
 //PWM2_T3C1，对应PB4
 //PWM3_T2C1，对应PA15
