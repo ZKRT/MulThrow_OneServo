@@ -6,6 +6,7 @@
 #include "can.h"
 #include "throw.h"
 #include "key.h"
+#include "flash.h"
 
 /*
 头文件顺序
@@ -24,6 +25,7 @@ void bsp_init(void)
 	SystemInit ();		/*系统初始化*/
 	RCC_Configuration();
 	SysTick_Init();
+	STMFLASH_Init();
 	TIM_Init();					//挨个通道初始化
 	LED_Init();					//5V使能，在这之前PWM波已经默认无动作了
 	ADC1_Init();
@@ -42,6 +44,7 @@ int main()
 	{
 		sub_throw_zkrt_recv_decode_and_zkrt_encode_ack();
 		KEY_Rock();
+		stmflash_process();
 		
 		if (_100ms_count - TimingDelay >= 100)							//100ms一个时间片
 		{
@@ -62,22 +65,22 @@ int main()
 				
 				if (MAVLINK_TX_INIT_VAL - TimingDelay > 5000)		//初始化的5S内不执行发送心跳，以后每次都发送心跳
 				{
-					if (GET_PWM1 == _1_THROW_UNLOCK)
+					if (GET_PWM1 == _1_THROW_UNLOCK(throw_init_value))
 					{
 						throw_ack_flag = 1;  //表示抛投1开
 					}
-					else if (GET_PWM1 == _2_THROW_UNLOCK)
+					else if (GET_PWM1 == _2_THROW_UNLOCK(throw_init_value))
 					{
 						throw_ack_flag = 3; //表示抛投1、2开
 					}
-					else if (GET_PWM1 == _3_THROW_UNLOCK)
+					else if (GET_PWM1 == _3_THROW_UNLOCK(throw_init_value))
 					{
 						throw_ack_flag = 7; //表示抛投1、2、3开
 					}
 					else
 					{
 						throw_ack_flag = 0;
-						THROW_PWM1(_ALL_THROW_LOCK);
+						THROW_PWM1(throw_init_value);
 					}
 					
 					status_throw[6] = throw_ack_flag;

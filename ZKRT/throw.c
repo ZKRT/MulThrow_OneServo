@@ -1,6 +1,7 @@
 #include "throw.h"
 #include "zkrt.h"	//调用需要
 #include "can.h"	//解析CAN的字节
+#include "flash.h"
 
 uint8_t throw_ack_flag;
 uint8_t can_value;
@@ -22,12 +23,12 @@ void sub_throw_zkrt_recv_decode_and_zkrt_encode_ack(void)
 					{
 						if (sub_throw_zkrt_packet_can1_rx.data[0] == 1)
 						{
-							THROW_PWM1(_1_THROW_UNLOCK);
+							THROW_PWM1(_1_THROW_UNLOCK(throw_init_value));
 							throw_ack_flag = 1;  //表示抛投1开									
 						}
 						else if (sub_throw_zkrt_packet_can1_rx.data[0] == 0)
 						{
-							THROW_PWM1(_1_THROW_LOCK);
+							THROW_PWM1(_1_THROW_LOCK(throw_init_value));
 							throw_ack_flag = 0;
 						}
 					}
@@ -35,12 +36,12 @@ void sub_throw_zkrt_recv_decode_and_zkrt_encode_ack(void)
 					{
 						if (sub_throw_zkrt_packet_can1_rx.data[1] == 1)				
 						{
-							THROW_PWM1(_2_THROW_UNLOCK);
+							THROW_PWM1(_2_THROW_UNLOCK(throw_init_value));
 							throw_ack_flag = 3; //表示抛投1、2开
 						}
 						else if (sub_throw_zkrt_packet_can1_rx.data[1] == 0)
 						{
-							THROW_PWM1(_2_THROW_LOCK);
+							THROW_PWM1(_2_THROW_LOCK(throw_init_value));
 							throw_ack_flag = 0;
 						}
 					}
@@ -48,12 +49,12 @@ void sub_throw_zkrt_recv_decode_and_zkrt_encode_ack(void)
 					{
 						if (sub_throw_zkrt_packet_can1_rx.data[2] == 1)
 						{
-							THROW_PWM1(_3_THROW_UNLOCK);
+							THROW_PWM1(_3_THROW_UNLOCK(throw_init_value));
 							throw_ack_flag = 7; //表示抛投1、2、3开
 						}
 						else if (sub_throw_zkrt_packet_can1_rx.data[2] == 0)
 						{
-							THROW_PWM1(_3_THROW_LOCK);
+							THROW_PWM1(_3_THROW_LOCK(throw_init_value));
 							throw_ack_flag = 0;
 						}
 					}
