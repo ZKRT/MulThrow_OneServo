@@ -38,8 +38,8 @@
 #define GET_PWM2								GET_PWM1
 #define GET_PWM3								GET_PWM1
 
-extern uint8_t throw_ack_flag;
+//extern uint8_t throw_ack_flag;
 void sub_throw_zkrt_recv_decode_and_zkrt_encode_ack(void);
-
+void check_throw_value(void);
 #endif
 

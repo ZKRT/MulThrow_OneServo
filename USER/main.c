@@ -7,23 +7,10 @@
 #include "throw.h"
 #include "key.h"
 #include "flash.h"
-
-/*
-头文件顺序
-sys.h
-led.h
-zkrt.h
-adc.h
-pwm.h
-
-can.h包含了zkrt.h
-throw包含了can.h、zkrt.h、pwm.h
-*/
+#include "appcan.h"
 
 void bsp_init(void)
 {
-	SystemInit ();		/*系统初始化*/
-	RCC_Configuration();
 	SysTick_Init();
 	STMFLASH_Init();
 	TIM_Init();					//挨个通道初始化
@@ -32,14 +19,10 @@ void bsp_init(void)
 	CAN_Mode_Init(CAN_Mode_Normal);//CAN初始化环回模式,波特率1Mbps
 	KEY_Init();
 }
-
-
-uint8_t status_throw[8] = {0XAA, 0XBB, 0XCC, 0XDD, 0XEE, 0X06, 0X00, 0X00};
-
 int main()
 {
   bsp_init();
-	
+	appcan_init();
 	while (1)
 	{
 		sub_throw_zkrt_recv_decode_and_zkrt_encode_ack();
@@ -65,31 +48,8 @@ int main()
 				
 				if (MAVLINK_TX_INIT_VAL - TimingDelay > 5000)		//初始化的5S内不执行发送心跳，以后每次都发送心跳
 				{
-					if (GET_PWM1 == _1_THROW_UNLOCK(throw_init_value))
-					{
-						throw_ack_flag = 1;  //表示抛投1开
-					}
-					else if (GET_PWM1 == _2_THROW_UNLOCK(throw_init_value))
-					{
-						throw_ack_flag = 3; //表示抛投1、2开
-					}
-					else if (GET_PWM1 == _3_THROW_UNLOCK(throw_init_value))
-					{
-						throw_ack_flag = 7; //表示抛投1、2、3开
-					}
-					else
-					{
-						throw_ack_flag = 0;
-						THROW_PWM1(throw_init_value);
-					}
-					
-					status_throw[6] = throw_ack_flag;
-					status_throw[7]++;
-					if (status_throw[7] == 0XFF)
-					{
-						status_throw[7] = 0;
-					}
-					Can_Send_Msg(status_throw, 8);								//这个简单的语句，便于调试响应
+					check_throw_value();
+					appcan_hbpacket_send();
 				}
 			}
 			
@@ -107,6 +67,3 @@ int main()
 		}
 	}
 }
-
-
-
