@@ -1,6 +1,5 @@
 #include "pwm.h"
 #include "throw.h"
-#include "flash.h"
 
 //说明：此版本使用PWM8-PA1引脚，支持多抛吊舱模块V4.0
 
@@ -54,10 +53,10 @@ void TIM_Init(void)
   TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;							
   TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;		
   TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;			
-  TIM_OCInitStructure.TIM_Pulse = throw_init_value;										
+  TIM_OCInitStructure.TIM_Pulse = _ALL_THROW_LOCK;										
 	
-//	TIM_OC4Init(TIM2, &TIM_OCInitStructure);  //modify by yanly
-//	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC4Init(TIM2, &TIM_OCInitStructure);  //modify by yanly
+	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
 	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
 
 	TIM_Cmd(TIM2, ENABLE);

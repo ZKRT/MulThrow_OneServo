@@ -6,13 +6,13 @@
 #include "can.h"
 #include "throw.h"
 #include "key.h"
-#include "flash.h"
+//#include "flash.h"
 #include "appcan.h"
 
 void bsp_init(void)
 {
 	SysTick_Init();
-	STMFLASH_Init();
+//	STMFLASH_Init();
 	TIM_Init();					//挨个通道初始化
 	LED_Init();					//5V使能，在这之前PWM波已经默认无动作了
 	ADC1_Init();
@@ -27,7 +27,7 @@ int main()
 	{
 		sub_throw_zkrt_recv_decode_and_zkrt_encode_ack();
 		KEY_Rock();
-		stmflash_process();
+//		stmflash_process();
 		
 		if (_100ms_count - TimingDelay >= 100)							//100ms一个时间片
 		{
