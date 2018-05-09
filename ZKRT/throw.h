@@ -19,7 +19,7 @@
 //#define _3_THROW_LOCK   _ALL_THROW_LOCK
 
 //zkrt_debug 170322
-#define _ALL_THROW_LOCK 1500     //值越小，锁的越多     num2  old:1340
+#define _ALL_THROW_LOCK 	1500     //值越小，锁的越多     num2  old:1340
 //第一个
 #define _1_THROW_UNLOCK(i)      (i+170)   //差值275										old:1480
 #define _1_THROW_LOCK(i)         i
@@ -39,7 +39,6 @@
 #define GET_PWM3								GET_PWM1
 
 //extern uint8_t throw_ack_flag;
-void sub_throw_zkrt_recv_decode_and_zkrt_encode_ack(void);
+//void sub_throw_zkrt_recv_decode_and_zkrt_encode_ack(void);
 void check_throw_value(void);
 #endif
-

@@ -27,42 +27,37 @@ IAP¿ÉÒÔÍ¨¹ıÈÎÒâ·½Ê½£¬ÈçÓ²¼ş¡¢ÍøÂç¡¢GPRSÔ¶³ÌÉı¼¶µÈ£¬Ğ§ÂÊºÜ¸ß¡£ÍøÂç¡¢GPRSµÈ×îºó»¹Ê
 flash_type flash_buffer;
 uint32_t throw_init_value;
 
-//¶ÁÈ¡Ö¸¶¨µØÖ·µÄ°ë×Ö(16Î»Êı¾İ) 
-//faddr:¶ÁµØÖ· 
+//¶ÁÈ¡Ö¸¶¨µØÖ·µÄ°ë×Ö(16Î»Êı¾İ)
+//faddr:¶ÁµØÖ·
 //·µ»ØÖµ:¶ÔÓ¦Êı¾İ.
-unsigned int STMFLASH_ReadWord(unsigned int faddr)
-{
+unsigned int STMFLASH_ReadWord(unsigned int faddr) {
 	uint32_t value;
 	value = *(uint32_t*)faddr;
-  return value;	
+	return value;
 }
 
 //¶ÔÉÈÇø7½øĞĞĞ´Èë
-void STMFLASH_Write(void)	
-{
+void STMFLASH_Write(void) {
 	uint8_t i = 0;
-  FLASH_Status status = FLASH_COMPLETE;
+	FLASH_Status status = FLASH_COMPLETE;
 	uint32_t WriteAddr = MY_SETTING_PAGE_ADDR;
 	uint32_t *flash_addr = (uint32_t *)(&flash_buffer._start_cod);
-	
-	FLASH_Unlock();																				//½âËø 
+
+	FLASH_Unlock();																				//½âËø
 //  FLASH_DataCacheCmd(DISABLE);													//FLASH²Á³ı»òĞ´ÈëÊ±£¬ÈÎºÎ³¢ÊÔ¶ÁÈ¡µÄ²Ù×÷»áµ¼ÖÂ×ÜÏß´íÎó¡£ËùÒÔÏëÒª¶ÁÈ¡³öÊı¾İ£¬¸ü¸Ä»º´æ£¬ÔÙĞ´ÈëµÄ²Ù×÷£¬±ØĞë½ûÖ¹Êı¾İ»º´æ¡£±¾À´Ã»Ê²Ã´ÓÃ£¬·Åµ½ÕâÀï±¸×¢£¡
-	   
-	status=FLASH_ErasePage(MY_SETTING_PAGE_ADDR);
-	
-	if(status==FLASH_COMPLETE)															//Èç¹û²Á³ı³É¹¦£¬²Å¿ªÊ¼Ğ´£¡
-	{
-		for (i = 0; i < FLASH_USE_NUM; i++)
-		{
-			if(FLASH_ProgramWord(WriteAddr,  *flash_addr) != FLASH_COMPLETE)
-			{
+
+	status = FLASH_ErasePage(MY_SETTING_PAGE_ADDR);
+
+	if (status == FLASH_COMPLETE) {														//Èç¹û²Á³ı³É¹¦£¬²Å¿ªÊ¼Ğ´£¡
+		for (i = 0; i < FLASH_USE_NUM; i++) {
+			if (FLASH_ProgramWord(WriteAddr,  *flash_addr) != FLASH_COMPLETE) {
 				break;	//Ğ´ÈëÒì³£
 			}
 			WriteAddr += 4;
 			flash_addr++;
 		}
 	}
-	
+
 //  FLASH_DataCacheCmd(ENABLE);	//FLASH²Á³ı½áÊø,¿ªÆôÊı¾İ»º´æ
 	FLASH_Lock();//ÉÏËø
 }
@@ -71,12 +66,12 @@ void STMFLASH_Write(void)
 //ReadAddr:ÆğÊ¼µØÖ·
 //pBuffer:Êı¾İÖ¸Õë
 //NumToRead:×Ö(4Î»)Êı
-//void STMFLASH_Read(void)   	
+//void STMFLASH_Read(void)
 //{
 //	uint32_t i;
 //	uint32_t ReadAddr = MY_SETTING_PAGE_ADDR;
 //	uint32_t *flash_addr = (uint32_t *)(&flash_buffer._start_cod);
-//	
+//
 //	for(i = 0;i < FLASH_USE_NUM; i++)
 //	{
 //		*flash_addr = STMFLASH_ReadWord(ReadAddr);
@@ -85,60 +80,51 @@ void STMFLASH_Write(void)
 //	}
 //}
 uint32_t dddddvalue[15];
-void STMFLASH_Read(void)   	
-{
+void STMFLASH_Read(void) {
 	uint32_t i;
 	uint32_t ReadAddr = MY_SETTING_PAGE_ADDR;
 	uint32_t *flash_addr = (uint32_t *)(&flash_buffer._start_cod);
 
-	
-	for(i = 0;i < 1; i++)
-	{
+
+	for (i = 0; i < 1; i++) {
 		dddddvalue[i] = STMFLASH_ReadWord(ReadAddr);
 		ReadAddr += 4;
 	}
 	ReadAddr = MY_SETTING_PAGE_ADDR;
-	for(i = 0;i < FLASH_USE_NUM; i++)
-	{
+	for (i = 0; i < FLASH_USE_NUM; i++) {
 		*flash_addr = STMFLASH_ReadWord(ReadAddr);
 		ReadAddr += 4;
 		flash_addr++;
-	}	
+	}
 }
 //½«flashÀïµÄÖµ´æ´¢µ½»º³åÊı×éÀï£¬ÔÙÔÚbspÀïÓÃÕâ¸öÊı×é¸ø¸÷¸ö±äÁ¿¸³Öµ
-void STMFLASH_Init(void)
-{
+void STMFLASH_Init(void) {
 	STMFLASH_Read();
-	
-	if((flash_buffer._start_cod == 0XFEDCBA98)&&(flash_buffer._end_cod == 0X76543210))
-	{
-	}
-	else
-	{
+
+	if ((flash_buffer._start_cod == 0XFEDCBA98) && (flash_buffer._end_cod == 0X76543210)) {
+	} else {
 		flash_buffer._start_cod = 0XFEDCBA98;
 		flash_buffer._end_cod = 0X76543210;
 		//tempture data
 		flash_buffer.throw_init_value  = _ALL_THROW_LOCK;
-		
+
 		STMFLASH_Write();
 	}
 	////read flash value to global param struct
 	throw_init_value = flash_buffer.throw_init_value;
 }
 //²Á³ıÄ³¸öÉÈÇø
-void STMFLASH_Erase(short sector)	
-{
-  FLASH_Status status = FLASH_COMPLETE;
-	
-	FLASH_Unlock();																				//½âËø 
+void STMFLASH_Erase(short sector) {
+	FLASH_Status status = FLASH_COMPLETE;
+
+	FLASH_Unlock();																				//½âËø
 //  FLASH_DataCacheCmd(DISABLE);													//FLASH²Á³ı»òĞ´ÈëÊ±£¬ÈÎºÎ³¢ÊÔ¶ÁÈ¡µÄ²Ù×÷»áµ¼ÖÂ×ÜÏß´íÎó¡£ËùÒÔÏëÒª¶ÁÈ¡³öÊı¾İ£¬¸ü¸Ä»º´æ£¬ÔÙĞ´ÈëµÄ²Ù×÷£¬±ØĞë½ûÖ¹Êı¾İ»º´æ¡£±¾À´Ã»Ê²Ã´ÓÃ£¬·Åµ½ÕâÀï±¸×¢£¡
-	   
-	status=FLASH_ErasePage(MY_SETTING_PAGE_ADDR);
-	
-	if(status==FLASH_COMPLETE)															//Èç¹û²Á³ı³É¹¦£¬²Å¿ªÊ¼Ğ´£¡
-	{
+
+	status = FLASH_ErasePage(MY_SETTING_PAGE_ADDR);
+
+	if (status == FLASH_COMPLETE) {														//Èç¹û²Á³ı³É¹¦£¬²Å¿ªÊ¼Ğ´£¡
 	}
-	
+
 //  FLASH_DataCacheCmd(ENABLE);	//FLASH²Á³ı½áÊø,¿ªÆôÊı¾İ»º´æ
 	FLASH_Lock();//ÉÏËø
 }
@@ -147,10 +133,8 @@ void STMFLASH_Erase(short sector)
   * @param  None
   * @retval None
   */
-void stmflash_process(void)	
-{
-	if(flash_buffer.throw_init_value != throw_init_value)
-	{
+void stmflash_process(void) {
+	if (flash_buffer.throw_init_value != throw_init_value) {
 		flash_buffer.throw_init_value  = throw_init_value;				//²½Öè¶ş£º±£´æ¸Ã±äÁ¿µ½»º´æÀï
 		STMFLASH_Write();											//²½ÖèÈı£º±àĞ´flash
 	}
