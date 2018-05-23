@@ -33,7 +33,7 @@
 //seq 序列号，自增
 //APPID, 保留，值0
 //#define _LENGTH     0X1E
-//#define _TOTAL_LEN  0X32   
+//#define _TOTAL_LEN  0X32
 
 //UAVID，设备类型定义，用于UAVID[3]
 #define DEVICE_TYPE_UDP             0X00
@@ -50,7 +50,7 @@
 #define DEVICE_TYPE_BATTERY         0X0B
 #define DEVICE_TYPE_3DMODELING      0X0C
 #define DEVICE_TYPE_MULTICAMERA     0X0D
-#define DEVICE_NUMBER               DEVICE_TYPE_MULTICAMERA  
+#define DEVICE_NUMBER               DEVICE_TYPE_MULTICAMERA
 #define DEVICE_TYPE_SELF            DEVICE_TYPE_THROW     //自身设备码
 
 #define DEVICE_TYPE_LOCAL_START     100
@@ -83,7 +83,7 @@
 //data index
 #define ZK_DINDEX_DEVTYPE           3
 
-//编号定义，用于UAVID[2：1]和UAVID[5：4]  
+//编号定义，用于UAVID[2：1]和UAVID[5：4]
 #define DEFAULT_NUM 0X00
 #define SECOND_NUM  0X01
 
@@ -96,8 +96,7 @@
 
 //packet max num
 #pragma pack(push, 1)
-typedef struct _zkrt_packet_t
-{
+typedef struct _zkrt_packet_t {
 	uint8_t start_code; 		        //字节0，帧起始码，0XEB
 	uint8_t ver;		   						  //字节1，协议版本
 	uint8_t session_ack;	          //字节2，会话ID，0无需应答，1有应答；帧标识：0数据帧，1命令帧
@@ -111,27 +110,25 @@ typedef struct _zkrt_packet_t
 	uint8_t data[ZK_DATA_MAX_LEN];  //字节
 	uint16_t crc;              			//字节17+len，CRC校验码
 	uint8_t end_code;          			//字节19+len，帧结束
-}zkrt_packet_t;
+} zkrt_packet_t;
 
 #pragma pack(pop)
 
 //get zkrt packet in can buffer relevant handle struct
-typedef struct
-{
+typedef struct {
 	u8 recv_ok;       //1-receive complete, 0-receive not complete
 	u8 curser_state;  //handle index state
 	u8 app_index;
 	u8 uav_index;
-	u8 dat_index;	
-	zkrt_packet_t packet;  //receive packet 
-}recv_zkrt_packet_handlest;
+	u8 dat_index;
+	zkrt_packet_t packet;  //receive packet
+} recv_zkrt_packet_handlest;
 
-typedef struct
-{
-  zkrt_packet_t packet;  
+typedef struct {
+	zkrt_packet_t packet;
 	u8 data[ZK_MAX_LEN];
-  u8 datalen;
-}msg_handle_st;
+	u8 datalen;
+} msg_handle_st;
 
 void crc_accumulate(uint8_t data, uint16_t *crcAccum);
 void crc_accumulate_buffer(uint16_t *crcAccum, const char *pBuffer, uint16_t length);

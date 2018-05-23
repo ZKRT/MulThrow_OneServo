@@ -599,6 +599,11 @@
               <FileType>1</FileType>
               <FilePath>..\ZKRT\appcan.c</FilePath>
             </File>
+            <File>
+              <FileName>appprotocol.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ZKRT\appprotocol.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
